@@ -53,6 +53,12 @@
                 </li>
             
             
+            
+                <li >
+                    <a href="types/">Types reference</a>
+                </li>
+            
+            
             </ul>
 
             <!-- Search, Navigation and Repo links -->
@@ -144,8 +150,7 @@ print json_encode($collection);
 <h2 id="printing-the-data">Printing the data</h2>
 <h3 id="printing-a-json-representation">Printing a JSON representation</h3>
 <p>All entities implement the <a href="http://php.net/manual/en/class.jsonserializable.php">JsonSerializable</a> interface,
-you can therefore call at any time the method <code>json_encode()</code>.
-This method will be recursively called on all nested entities.</p>
+you can therefore call at any time the method <code>json_encode()</code>.</p>
 <pre class="prettyprint well"><code class="php">print json_encode($collection);
 </code></pre>
 
@@ -236,7 +241,7 @@ $next-&gt;setName('email');
 $next-&gt;setValue('email value');
 </code></pre>
 
-<p>See the <a href="https://github.com/mickaelvieira/JsonCollection/blob/master/docs/entities.md">entities documentation</a> for the detail of each entity.</p>
+<p>See the <a href="entities/">entities documentation</a> for the detail of each entity.</p>
 <h2 id="working-with-data-links-and-options">Working with data, links and options</h2>
 <ul>
 <li>The interface <code>DataAware</code> implemented by <code>Item</code>, <code>Query</code> and <code>Template</code> entities,
