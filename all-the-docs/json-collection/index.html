@@ -136,14 +136,14 @@ print json_encode($collection);
 </code></pre>
 
 <pre class="prettyprint well"><code class="json">{
-  &quot;collection&quot;: {
-    &quot;version&quot;: &quot;1.0&quot;,
-    &quot;items&quot;: [
-      {
-        &quot;href&quot;: &quot;/item/1&quot;
-      }
-    ]
-  }
+    &quot;collection&quot;: {
+        &quot;version&quot;: &quot;1.0&quot;,
+        &quot;items&quot;: [
+            {
+                &quot;href&quot;: &quot;/item/1&quot;
+            }
+        ]
+    }
 }
 </code></pre>
 
@@ -168,9 +168,8 @@ you can therefore call at any time the method <code>json_encode()</code>.</p>
 </code></pre>
 
 <h3 id="printing-an-array-representation">Printing an Array representation</h3>
-<p>All entities implement a custom interface <code>ArrayConvertible</code>,
-you can therefore call at any time the method <code>toArray()</code>.
-This method will be recursively called on all nested entities.</p>
+<p>All entities implement a custom interface named <code>ArrayConvertible</code>, so you can call at any time the method <code>toArray()</code>.
+This method will be called recursively on all nested entities.</p>
 <pre class="prettyprint well"><code class="php">print_r($collection-&gt;toArray());
 </code></pre>
 
@@ -191,25 +190,25 @@ This method will be recursively called on all nested entities.</p>
 </code></pre>
 
 <h3 id="adding-an-envelope">Adding an envelope</h3>
-<p>The <code>JsonCollection\Entity\Collection</code> entity will be by default wrapped within an envelope.</p>
+<p>Beside the <code>JsonCollection\Entity\Collection</code> entity will be by default wrapped within an envelope...</p>
 <pre class="prettyprint well"><code class="php">echo json_encode($collection);
 </code></pre>
 
 <pre class="prettyprint well"><code class="json">{
-  &quot;collection&quot;: {
-    &quot;version&quot;: &quot;1.0&quot;
-  }
+    &quot;collection&quot;: {
+        &quot;version&quot;: &quot;1.0&quot;
+     }
 }
 </code></pre>
 
-<p>Others entities will not be wrapped within an envelope.</p>
+<p>...others entities will not be wrapped within an envelope.</p>
 <pre class="prettyprint well"><code class="php">echo json_encode($template);
 </code></pre>
 
 <pre class="prettyprint well"><code class="json">{
-  &quot;data&quot;: [
-    ...
-  ]
+    &quot;data&quot;: [
+        ...
+    ]
 }
 </code></pre>
 
@@ -219,17 +218,25 @@ echo json_encode($template);
 </code></pre>
 
 <pre class="prettyprint well"><code class="json">{
-  &quot;template&quot;: {
-    &quot;data&quot;: [
-      ...
-    ]
-  }
+    &quot;template&quot;: {
+        &quot;data&quot;: [
+            ...
+        ]
+    }
 }
 </code></pre>
 
 <h2 id="creating-an-entity">Creating an entity</h2>
 <p>All entities can be created by passing an array in the constructor...</p>
 <pre class="prettyprint well"><code class="php">$data = new Data([
+    'name' =&gt; 'email',
+    'value' =&gt; 'email value'
+]);
+</code></pre>
+
+<p>...or inject the data later on</p>
+<pre class="prettyprint well"><code class="php">$data = new Data();
+$data-&gt;inject([
     'name' =&gt; 'email',
     'value' =&gt; 'email value'
 ]);
@@ -243,10 +250,18 @@ $next-&gt;setValue('email value');
 
 <p>See the <a href="entities/">entities documentation</a> for the detail of each entity.</p>
 <h2 id="working-with-data-links-and-options">Working with data, links and options</h2>
+<p>In order to work with JsonCollection Arrays Data, Links, Options and Messages the API provides 4 interfaces that implement the same kind of logic.</p>
 <ul>
 <li>The interface <code>DataAware</code> implemented by <code>Item</code>, <code>Query</code> and <code>Template</code> entities,
-provides the methods <code>addData</code> and <code>addDataSet</code></li>
+provides the methods <code>addData</code>, <code>addDataSet</code> and <code>getDataSet</code></li>
+<li>The interface <code>LinkAware</code> implemented by <code>Collection</code> and <code>Item</code> entities,
+provides the methods<code>addLink</code>, <code>addLinkSet</code> and <code>getLinkSet</code></li>
+<li>The interface <code>OptionAware</code> implemented by <code>Enctype</code>, <code>ListData</code> and <code>Method</code> entities,
+provides the methods <code>addOption</code>, <code>addOptionSet</code> and <code>getOptionSet</code></li>
+<li>The interface <code>MessageAware</code> implemented by the <code>Error</code> entity,
+provides the methods <code>addMessage</code>, <code>addMessageSet</code> and <code>getMessageSet</code></li>
 </ul>
+<p>They allows you to add the corresponding entities to objects that implement them.</p>
 <pre class="prettyprint well"><code class="php">$item = new Item();
 
 // this...
@@ -265,12 +280,12 @@ $item-&gt;addData($data);
 // and that...
 $item-&gt;addDataSet([
     [
-       'name' =&gt; 'email',
-       'value' =&gt; 'email value'
+        'name' =&gt; 'email',
+        'value' =&gt; 'email value'
     ],
     [
-       'name' =&gt; 'tel',
-       'value' =&gt; 'tel value'
+        'name' =&gt; 'tel',
+        'value' =&gt; 'tel value'
     ]
 ]);
 
@@ -286,98 +301,6 @@ $data2 = new Data([
 $item-&gt;addDataSet([
     $data1,
     $data2
-]);
-</code></pre>
-
-<ul>
-<li>The interface <code>LinkAware</code> implemented by <code>Collection</code> and <code>Item</code> entities,
-provides the methods<code>addLink</code> and <code>addLinkSet</code></li>
-</ul>
-<pre class="prettyprint well"><code class="php">$collection = new Collection();
-
-// this...
-$collection-&gt;addLink([
-    'href' =&gt; 'uri',
-    'rel' =&gt; 'prev'
-]);
-
-// ...is similar to 
-$link = new Link([
-    'href' =&gt; 'uri',
-    'rel' =&gt; 'prev'
-]);
-$collection-&gt;addLink($link);
-
-// and that...
-$collection-&gt;addLinkSet([
-    [
-        'href' =&gt; 'uri',
-        'rel' =&gt; 'prev'
-    ],
-    [
-        'href' =&gt; 'uri',
-        'rel' =&gt; 'next'
-    ]
-]);
-
-// ...is similar to 
-$link1 = new Link([
-    'href' =&gt; 'uri',
-    'rel' =&gt; 'prev'
-]);
-$link2 = new Link([
-    'href' =&gt; 'uri',
-    'rel' =&gt; 'next'
-]);
-$collection-&gt;addLinkSet([
-    $link1,
-    $link2
-]);
-</code></pre>
-
-<ul>
-<li>The interface <code>OptionAware</code> implemented by <code>Enctype</code>, <code>ListData</code> and <code>Method</code> entities,
-provides the methods <code>addOption</code> and <code>addOptionSet</code></li>
-</ul>
-<pre class="prettyprint well"><code class="php">$list = new ListData();
-
-// this...
-$list-&gt;addOption([
-    'prompt' =&gt; 'option prompt',
-    'value' =&gt; 'option value'
-]);
-
-// ...is similar to 
-$option = new Option([
-    'prompt' =&gt; 'option prompt',
-    'value' =&gt; 'option value'
-]);
-$list-&gt;addOption($option);
-
-// and that...
-$list-&gt;addOptionSet([
-    [
-        'prompt' =&gt; 'option 1 prompt',
-        'value' =&gt; 'option 1 value'
-    ],
-    [
-        'prompt' =&gt; 'option 2 prompt',
-        'value' =&gt; 'option 2 value'
-    ]
-]);
-
-// ...is similar to 
-$option1 = new Option([
-    'prompt' =&gt; 'option 1 prompt',
-    'value' =&gt; 'option 1 value'
-]);
-$option2 = new Option([
-    'prompt' =&gt; 'option 2 prompt',
-    'value' =&gt; 'option 2 value'
-]);
-$list-&gt;addOptionSet([
-    $option1,
-    $option2
 ]);
 </code></pre>
 
