@@ -103,7 +103,7 @@
         
             <li><a href="#creating-an-entity">Creating an entity</a></li>
         
-            <li><a href="#working-with-data-links-and-options">Working with data, links and options</a></li>
+            <li><a href="#working-with-data-links-options-and-messages">Working with data, links, options and messages</a></li>
         
     
     </ul>
@@ -113,6 +113,7 @@
 <h1 id="jsoncollection">JsonCollection</h1>
 <p>PHP implementation of the Collection.next+JSON Media Type</p>
 <h2 id="installation">Installation</h2>
+<p>JsonCollection requires php&gt;=5.4</p>
 <p>Install JsonCollection with <a href="https://getcomposer.org/">Composer</a>:</p>
 <pre class="prettyprint well"><code class="json">{
     &quot;require&quot;: {
@@ -249,8 +250,8 @@ $next-&gt;setValue('email value');
 </code></pre>
 
 <p>See the <a href="entities/">entities documentation</a> for the detail of each entity.</p>
-<h2 id="working-with-data-links-and-options">Working with data, links and options</h2>
-<p>In order to work with JsonCollection Arrays Data, Links, Options and Messages the API provides 4 interfaces that implement the same kind of logic.</p>
+<h2 id="working-with-data-links-options-and-messages">Working with data, links, options and messages</h2>
+<p>In order to work with JsonCollection Arrays <a href="http://amundsen.com/media-types/collection/format/#arrays-data">Data</a>, <a href="http://amundsen.com/media-types/collection/format/#arrays-links">Links</a>, <a href="http://code.ge/media-types/collection-next-json/#array-options">Options</a> and <a href="http://code.ge/media-types/collection-next-json/#array-messages">Messages</a> the API provides 4 interfaces that implement the same logic.</p>
 <ul>
 <li>The interface <code>DataAware</code> implemented by <code>Item</code>, <code>Query</code> and <code>Template</code> entities,
 provides the methods <code>addData</code>, <code>addDataSet</code> and <code>getDataSet</code></li>
